@@ -1,0 +1,10 @@
+../USBPD/App/usbpd_usb_if.c:125:9:USBPD_USBIF_Init	1
+../USBPD/App/usbpd_usb_if.c:136:6:USBPD_USBIF_DeviceStart	2
+../USBPD/App/usbpd_usb_if.c:152:6:USBPD_USBIF_DeviceStop	1
+../USBPD/App/usbpd_usb_if.c:159:6:USBPD_USBIF_HostStart	1
+../USBPD/App/usbpd_usb_if.c:166:6:USBPD_USBIF_HostStop	1
+../USBPD/App/usbpd_usb_if.c:173:6:USBPD_USBIF_DeviceBillboard	1
+../USBPD/App/usbpd_usb_if.c:180:6:USBPD_USBIF_Swap2Host	1
+../USBPD/App/usbpd_usb_if.c:187:6:USBPD_USBIF_Swap2Device	1
+../USBPD/App/usbpd_usb_if.c:194:6:USBPD_USBIF_DeviceSetBOSInfo	1
+../USBPD/App/usbpd_usb_if.c:201:6:USBPD_USBIF_DeviceSetVDMInfo	1
