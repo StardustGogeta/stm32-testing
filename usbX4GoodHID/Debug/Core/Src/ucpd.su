@@ -1,0 +1,13 @@
+../Drivers/CMSIS/Include/core_cm0plus.h:741:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
+../Drivers/CMSIS/Include/core_cm0plus.h:850:22:__NVIC_SetPriority	24	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:603:22:LL_DMA_SetDataTransferDirection	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:654:22:LL_DMA_SetMode	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:701:22:LL_DMA_SetPeriphIncMode	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:748:22:LL_DMA_SetMemoryIncMode	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:796:22:LL_DMA_SetPeriphSize	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:845:22:LL_DMA_SetMemorySize	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:895:22:LL_DMA_SetChannelPriorityLevel	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_dma.h:1270:22:LL_DMA_SetPeriphRequest	32	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_bus.h:467:22:LL_APB1_GRP1_EnableClock	24	static
+../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_ll_bus.h:1135:22:LL_IOP_GRP1_EnableClock	24	static
+../Core/Src/ucpd.c:28:6:MX_UCPD2_Init	32	static

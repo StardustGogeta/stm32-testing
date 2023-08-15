@@ -56,7 +56,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART2_UART_Init(void);
-void MX_USB_DRD_FS_PCD_Init(void);
+static void MX_USB_DRD_FS_PCD_Init(void);
 static void MX_UCPD2_Init(void);
 /* USER CODE BEGIN PFP */
 
@@ -300,7 +300,7 @@ static void MX_USART2_UART_Init(void)
   * @param None
   * @retval None
   */
-void MX_USB_DRD_FS_PCD_Init(void)
+static void MX_USB_DRD_FS_PCD_Init(void)
 {
 
   /* USER CODE BEGIN USB_DRD_FS_Init 0 */
