@@ -1,7 +1,0 @@
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:74:6:_ux_network_driver_init	16	static
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:154:6:_ux_network_driver_activate	48	static,ignoring_inline_asm
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:306:6:_ux_network_driver_deactivate	32	static,ignoring_inline_asm
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:428:6:_ux_network_driver_entry	56	static,ignoring_inline_asm
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:768:7:_ux_network_driver_packet_received	32	static
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:896:6:_ux_network_driver_link_up	24	static
-../Middlewares/ST/usbx/common/usbx_network/src/ux_network_driver.c:957:6:_ux_network_driver_link_down	24	static

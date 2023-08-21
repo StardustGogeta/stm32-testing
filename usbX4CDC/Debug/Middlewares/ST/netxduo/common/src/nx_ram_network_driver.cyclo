@@ -1,3 +1,0 @@
-../Middlewares/ST/netxduo/common/src/nx_ram_network_driver.c:155:7:_nx_ram_network_driver	45
-../Middlewares/ST/netxduo/common/src/nx_ram_network_driver.c:668:7:_nx_ram_network_driver_output	16
-../Middlewares/ST/netxduo/common/src/nx_ram_network_driver.c:866:7:_nx_ram_network_driver_receive	5

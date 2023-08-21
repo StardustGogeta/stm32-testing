@@ -1,4 +1,0 @@
-../Core/Src/app_threadx.c:75:6:App_ThreadX_Init	4
-../Core/Src/app_threadx.c:118:6:MX_ThreadX_Init	1
-../Core/Src/app_threadx.c:133:6:App_Delay	1
-../Core/Src/app_threadx.c:138:6:MainThread_Entry	4
