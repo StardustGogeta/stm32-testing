@@ -292,10 +292,11 @@ void usbx_cdc_acm_read_thread_entry(ULONG arg)
 #endif /* UX_DEVICE_CLASS_CDC_ACM_TRANSMISSION_DISABLE */
 
         /* Read the received data in blocking mode */
-        ux_device_class_cdc_acm_read(cdc_acm, (UCHAR *)UserRxBufferFS, 64,
-                                     &actual_length);
+        ux_device_class_cdc_acm_read(cdc_acm, (UCHAR *)UserRxBufferFS, 64, &actual_length);
         if (actual_length != 0)
         {
+        	ux_status = ux_device_class_cdc_acm_write(cdc_acm, (UCHAR *)UserRxBufferFS, actual_length, NULL);
+        	continue;
           /* Send the data via UART */
           if (HAL_UART_Transmit_DMA(&huart1, (uint8_t *)UserRxBufferFS,
         		  	  	  	  	  	actual_length) != HAL_OK)
@@ -316,6 +317,8 @@ void usbx_cdc_acm_read_thread_entry(ULONG arg)
           }
         }
       }
+      tx_thread_sleep(10);
+      HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
     }
     else
     {
@@ -339,7 +342,7 @@ void usbx_cdc_acm_write_thread_entry(ULONG arg)
   ULONG buffptr;
   ULONG buffsize;
   UINT ux_status = UX_SUCCESS;
-
+return;
   while (1)
   {
     /* Wait until the requested flag RX_NEW_RECEIVED_DATA is received */

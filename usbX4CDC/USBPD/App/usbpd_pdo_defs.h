@@ -50,7 +50,19 @@
   * @brief  USBPD Port PDO Structure definition
   *
   */
+typedef struct
+{
+  uint32_t *ListOfPDO;                          /*!< Pointer on Power Data Objects list, defining
+                                                      port capabilities */
 
+  uint8_t  *NumberOfPDO;       /*!< Number of Power Data Objects defined in ListOfPDO
+                                                     This parameter must be set at max to @ref USBPD_MAX_NB_PDO value */
+} USBPD_PortPDO_TypeDef;
+
+typedef struct
+{
+  USBPD_PortPDO_TypeDef    SinkPDO;        /*!< SRC Power Data Objects */
+} USBPD_PWR_Port_PDO_Storage_TypeDef;
 /* USER CODE END typedef */
 
 /* Exported define -----------------------------------------------------------*/
@@ -77,7 +89,12 @@
 /* Exported variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN variables */
-
+#ifndef __USBPD_PWR_IF_C
+extern uint8_t USBPD_NbPDO[4];
+#else
+uint8_t USBPD_NbPDO[4] = {(PORT0_NB_SINKPDO),
+                          (PORT0_NB_SOURCEPDO)};
+#endif
 /* USER CODE END variables */
 
 #ifndef __USBPD_PWR_IF_C

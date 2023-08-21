@@ -86,7 +86,12 @@
   * @{
   */
 /* USER CODE BEGIN Private_Variables */
+/**
+  * @brief  USBPD Port PDO Storage array declaration
+  */
 
+/**** PDO ****/
+USBPD_PWR_Port_PDO_Storage_TypeDef PWR_Port_PDO_Storage[USBPD_PORT_COUNT];
 /* USER CODE END Private_Variables */
 /**
   * @}
@@ -115,7 +120,14 @@
 USBPD_StatusTypeDef USBPD_PWR_IF_Init(void)
 {
 /* USER CODE BEGIN USBPD_PWR_IF_Init */
-  return USBPD_ERROR;
+  USBPD_StatusTypeDef _status = USBPD_OK;
+
+  /* Set links to PDO values and number for Port 0 (defined in PDO arrays in H file).
+   */
+  PWR_Port_PDO_Storage[USBPD_PORT_0].SinkPDO.ListOfPDO   = (uint32_t *) PORT0_PDO_ListSNK;
+  PWR_Port_PDO_Storage[USBPD_PORT_0].SinkPDO.NumberOfPDO = &USBPD_NbPDO[0];
+
+  return _status;
 /* USER CODE END USBPD_PWR_IF_Init */
 }
 

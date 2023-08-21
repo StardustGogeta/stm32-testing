@@ -58,7 +58,15 @@ typedef struct
   uint16_t PID;               /*!< Product ID (assigned by the manufacturer)              */
 } USBPD_IdSettingsTypeDef;
 /* USER CODE BEGIN Typedef */
-
+typedef struct
+{
+  uint32_t                      DPM_RDOPosition;                         /*!< RDO Position of requested DO in Source list of capabilities          */
+  uint32_t                      DPM_RDOPositionPrevious;                 /*!< RDO Position of requested DO in Source list of capabilities          */
+  uint32_t                      DPM_RequestedVoltage;                    /*!< Value of requested voltage                                           */
+  uint32_t                      DPM_RequestDOMsg;
+  uint32_t                      DPM_NumberOfRcvSRCPDO;
+  uint32_t                      DPM_ListOfRcvSRCPDO[8];
+} USBPD_HandleTypeDef;
 /* USER CODE END Typedef */
 
 /* Exported define -----------------------------------------------------------*/
@@ -138,6 +146,9 @@ USBPD_StatusTypeDef USBPD_DPM_RequestVDM_DiscoverySVID(uint8_t PortNum, USBPD_SO
 USBPD_StatusTypeDef USBPD_DPM_RequestVDM_DiscoveryMode(uint8_t PortNum, USBPD_SOPType_TypeDef SOPType, uint16_t SVID);
 USBPD_StatusTypeDef USBPD_DPM_RequestVDM_EnterMode(uint8_t PortNum, USBPD_SOPType_TypeDef SOPType, uint16_t SVID, uint8_t ModeIndex);
 USBPD_StatusTypeDef USBPD_DPM_RequestVDM_ExitMode(uint8_t PortNum, USBPD_SOPType_TypeDef SOPType, uint16_t SVID, uint8_t ModeIndex);
+USBPD_StatusTypeDef USBPD_DPM_RequestDisplayPortStatus(uint8_t PortNum, USBPD_SOPType_TypeDef SOPType, uint16_t SVID, uint32_t *pDPStatus);
+USBPD_StatusTypeDef USBPD_DPM_RequestDisplayPortConfig(uint8_t PortNum, USBPD_SOPType_TypeDef SOPType, uint16_t SVID, uint32_t *pDPConfig);
+USBPD_StatusTypeDef USBPD_DPM_RequestAttention(uint8_t PortNum, USBPD_SOPType_TypeDef SOPType, uint16_t SVID);
 USBPD_StatusTypeDef USBPD_DPM_RequestAlert(uint8_t PortNum, USBPD_ADO_TypeDef Alert);
 USBPD_StatusTypeDef USBPD_DPM_RequestGetSourceCapabilityExt(uint8_t PortNum);
 USBPD_StatusTypeDef USBPD_DPM_RequestGetSinkCapabilityExt(uint8_t PortNum);

@@ -28,6 +28,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usbpd_pdo_defs.h"
 #include "usbpd_dpm_user.h"
+#include "usbpd_vdm_user.h"
 
 /* USER CODE BEGIN Includes */
 /* Section where include file can be added */
@@ -71,7 +72,7 @@ USBPD_SettingsTypeDef       DPM_Settings[USBPD_PORT_COUNT] =
     .PE_CapscounterSupport = USBPD_FALSE,       /* support caps counter                                    */
     .CAD_RoleToggle = USBPD_FALSE,               /* CAD role toggle                                         */
     .CAD_TryFeature = 0,              /* CAD try feature                                         */
-    .CAD_AccesorySupport = USBPD_TRUE,         /* CAD accessory support                                   */
+    .CAD_AccesorySupport = USBPD_FALSE,         /* CAD accessory support                                   */
     .PE_PD3_Support.d =                           /*!< PD3 SUPPORT FEATURE                                              */
     {
       .PE_UnchunkSupport                = USBPD_FALSE,  /* support Unchunked mode (valid only spec revision 3.0)   */
