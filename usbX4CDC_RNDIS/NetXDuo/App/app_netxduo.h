@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
+  * Copyright (c) 2020-2021 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -31,7 +31,10 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 
 /* USER CODE BEGIN Includes */
-
+#include "main.h"
+#include "nxd_dhcp_server.h"
+#include "ux_api.h"
+#include "ux_network_driver.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -47,13 +50,22 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
 
+/* Packet payload size */
+#define PACKET_PAYLOAD_SIZE              1536
+
+/* Packet pool size */
+#define NX_PACKET_POOL_SIZE              ((1536 + sizeof(NX_PACKET)) * 60)
+
+/* HTTP connection port */
+#define CONNECTION_PORT                  80
+
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
 UINT MX_NetXDuo_Init(VOID *memory_ptr);
 
 /* USER CODE BEGIN EFP */
-
+VOID nx_server_thread_entry(ULONG thread_input);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

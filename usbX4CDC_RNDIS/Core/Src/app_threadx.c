@@ -56,8 +56,8 @@
 	#if defined ( __ICCARM__ ) /* IAR Compiler */
 	  #pragma data_alignment=4
 	#endif /* defined ( __ICCARM__ ) */
-	__ALIGN_BEGIN static USB_MODE_STATE USB_Device_State_Msg;
-	static int txSent = 0;
+	//__ALIGN_BEGIN static USB_MODE_STATE USB_Device_State_Msg;
+	//static int txSent = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

@@ -58,7 +58,7 @@
 /* This value is the size of the stack in bytes for the USBX threads. It can be typically 1024 bytes
    or 2048 bytes depending on the processor used and the host controller. */
 
-#define UX_THREAD_STACK_SIZE                                (2048 * 8)
+#define UX_THREAD_STACK_SIZE                                (2048 * 1)
 
 /* Define USBX Host Enum Thread Stack Size. The default is to use UX_THREAD_STACK_SIZE */
 /*

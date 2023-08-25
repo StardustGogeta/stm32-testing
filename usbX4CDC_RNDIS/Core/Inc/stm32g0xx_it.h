@@ -51,8 +51,6 @@ void HardFault_Handler(void);
 void RCC_IRQHandler(void);
 void EXTI4_15_IRQHandler(void);
 void USB_UCPD1_2_IRQHandler(void);
-void DMA1_Channel1_IRQHandler(void);
-void DMA1_Channel2_3_IRQHandler(void);
 void ADC1_COMP_IRQHandler(void);
 void TIM1_BRK_UP_TRG_COM_IRQHandler(void);
 /* USER CODE BEGIN EFP */

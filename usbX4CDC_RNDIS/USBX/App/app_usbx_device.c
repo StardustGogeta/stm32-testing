@@ -45,8 +45,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define USBX_APP_STACK_SIZE     (10 * 1024)
-#define USBX_MEMORY_SIZE        (88 * 1024)
+#define USBX_APP_STACK_SIZE     (2 * 1024)
+#define USBX_MEMORY_SIZE        (25 * 1024)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -64,12 +64,12 @@ static ULONG rndis_configuration_number;
 static UCHAR rndis_local_nodeid[UX_DEVICE_CLASS_RNDIS_NODE_ID_LENGTH];
 static UCHAR rndis_remote_nodeid[UX_DEVICE_CLASS_RNDIS_NODE_ID_LENGTH];
 static UX_SLAVE_CLASS_RNDIS_PARAMETER rndis_parameter;
-
+/*
 static ULONG cdc_ecm_interface_number;
 static ULONG cdc_ecm_configuration_number;
 static UCHAR cdc_ecm_local_nodeid[UX_DEVICE_CLASS_CDC_ECM_NODE_ID_LENGTH];
 static UCHAR cdc_ecm_remote_nodeid[UX_DEVICE_CLASS_CDC_ECM_NODE_ID_LENGTH];
-
+*/
 /*
 TX_THREAD                       ux_hid_thread;
 UX_SLAVE_CLASS_HID_EVENT        mouse_hid_event;
@@ -147,83 +147,83 @@ UINT MX_USBX_Device_Init(VOID *memory_ptr)
   /* Get_Language_Id_Framework and get the length */
   language_id_framework = USBD_Get_Language_Id_Framework(&languge_id_framework_length);
 
-  unsigned char device_framework_full_speed2[] = {
-
-      /* Device descriptor 18 bytes
-      0x02 bDeviceClass: CDC_ECM class code
-      0x06 bDeviceSubclass: CDC_ECM class sub code
-      0x00 bDeviceProtocol: CDC_ECM Device protocol
-      idVendor & idProduct - https://www.linux-usb.org/usb.ids
-      0x3939 idVendor: Azure RTOS test.
-      */
-
-      0x12, 0x01, 0x10, 0x01,
-      0x02, 0x00, 0x00, 0x08,
-      0x39, 0x39, 0x08, 0x08, 0x00, 0x01, 0x01, 0x02, 03,0x01,
-
-      /* Configuration 1 descriptor 9 bytes. */
-      0x09, 0x02, 0x58, 0x00,0x02, 0x01, 0x00,0x40, 0x00,
-
-      /* Interface association descriptor. 8 bytes. */
-
-      0x08, 0x0b, 0x00, 0x02, 0x02, 0x06, 0x00, 0x00,
-
-      /* Communication Class Interface Descriptor Requirement 9 bytes */
-      0x09, 0x04, 0x00, 0x00,0x01,0x02, 0x06, 0x00, 0x00,
-
-      /* Header Functional Descriptor 5 bytes */
-      0x05, 0x24, 0x00, 0x10, 0x01,
-
-      /* ECM Functional Descriptor 13 bytes */
-      0x0D, 0x24, 0x0F, 0x04,0x00, 0x00, 0x00, 0x00, 0xEA, 0x05, 0x00,
-      0x00,0x00,
-
-      /* Union Functional Descriptor 5 bytes */
-      0x05, 0x24, 0x06, 0x00,0x01,
-
-      /* Endpoint descriptor (Interrupt) */
-      0x07, 0x05, 0x83, 0x03, 0x08, 0x00, 0x08,
-
-      /* Data Class Interface Descriptor Alternate Setting 0, 0 endpoints. 9 bytes */
-      0x09, 0x04, 0x01, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00,
-
-      /* Data Class Interface Descriptor Alternate Setting 1, 2 endpoints. 9 bytes */
-      0x09, 0x04, 0x01, 0x01, 0x02, 0x0A, 0x00, 0x00,0x00,
-
-      /* First alternate setting Endpoint 1 descriptor 7 bytes */
-      0x07, 0x05, 0x02, 0x02, 0x40, 0x00, 0x00,
-
-      /* Endpoint 2 descriptor 7 bytes */
-      0x07, 0x05, 0x81, 0x02, 0x40, 0x00,0x00
-
-  };
-
-  unsigned char string_framework2[] = {
-      /* Manufacturer string descriptor: Index 1 - "Azure RTOS" */
-      0x09, 0x04, 0x01, 0x0c,
-      0x45, 0x78, 0x70, 0x72, 0x65, 0x73, 0x20, 0x4c,
-      0x6f, 0x67, 0x69, 0x63,
-
-      /* Product string descriptor: Index 2 - "EL CDCECM Device" */
-      0x09, 0x04, 0x02, 0x10,
-      0x45, 0x4c, 0x20, 0x43, 0x44, 0x43, 0x45, 0x43,
-      0x4d, 0x20, 0x44, 0x65, 0x76, 0x69, 0x63, 0x64,
-
-      /* Serial Number string descriptor: Index 3 - "0001" */
-      0x09, 0x04, 0x03, 0x04,
-      0x30, 0x30, 0x30, 0x31,
-
-      /* MAC Address string descriptor: Index 4 - "001E5841B879" */
-      0x09, 0x04, 0x04, 0x0C,
-      0x30, 0x30, 0x31, 0x45, 0x35, 0x38,
-      0x34, 0x31, 0x42, 0x38, 0x37, 0x39
-
-  };
-
-  unsigned char language_id_framework2[] = {
-		    /* English. */
-		    0x09, 0x04
-		};
+//  unsigned char device_framework_full_speed2[] = {
+//
+//      /* Device descriptor 18 bytes
+//      0x02 bDeviceClass: CDC_ECM class code
+//      0x06 bDeviceSubclass: CDC_ECM class sub code
+//      0x00 bDeviceProtocol: CDC_ECM Device protocol
+//      idVendor & idProduct - https://www.linux-usb.org/usb.ids
+//      0x3939 idVendor: Azure RTOS test.
+//      */
+//
+//      0x12, 0x01, 0x10, 0x01,
+//      0x02, 0x00, 0x00, 0x08,
+//      0x39, 0x39, 0x08, 0x08, 0x00, 0x01, 0x01, 0x02, 03,0x01,
+//
+//      /* Configuration 1 descriptor 9 bytes. */
+//      0x09, 0x02, 0x58, 0x00,0x02, 0x01, 0x00,0x40, 0x00,
+//
+//      /* Interface association descriptor. 8 bytes. */
+//
+//      0x08, 0x0b, 0x00, 0x02, 0x02, 0x06, 0x00, 0x00,
+//
+//      /* Communication Class Interface Descriptor Requirement 9 bytes */
+//      0x09, 0x04, 0x00, 0x00,0x01,0x02, 0x06, 0x00, 0x00,
+//
+//      /* Header Functional Descriptor 5 bytes */
+//      0x05, 0x24, 0x00, 0x10, 0x01,
+//
+//      /* ECM Functional Descriptor 13 bytes */
+//      0x0D, 0x24, 0x0F, 0x04,0x00, 0x00, 0x00, 0x00, 0xEA, 0x05, 0x00,
+//      0x00,0x00,
+//
+//      /* Union Functional Descriptor 5 bytes */
+//      0x05, 0x24, 0x06, 0x00,0x01,
+//
+//      /* Endpoint descriptor (Interrupt) */
+//      0x07, 0x05, 0x83, 0x03, 0x08, 0x00, 0x08,
+//
+//      /* Data Class Interface Descriptor Alternate Setting 0, 0 endpoints. 9 bytes */
+//      0x09, 0x04, 0x01, 0x00, 0x00, 0x0A, 0x00, 0x00, 0x00,
+//
+//      /* Data Class Interface Descriptor Alternate Setting 1, 2 endpoints. 9 bytes */
+//      0x09, 0x04, 0x01, 0x01, 0x02, 0x0A, 0x00, 0x00,0x00,
+//
+//      /* First alternate setting Endpoint 1 descriptor 7 bytes */
+//      0x07, 0x05, 0x02, 0x02, 0x40, 0x00, 0x00,
+//
+//      /* Endpoint 2 descriptor 7 bytes */
+//      0x07, 0x05, 0x81, 0x02, 0x40, 0x00,0x00
+//
+//  };
+//
+//  unsigned char string_framework2[] = {
+//      /* Manufacturer string descriptor: Index 1 - "Azure RTOS" */
+//      0x09, 0x04, 0x01, 0x0c,
+//      0x45, 0x78, 0x70, 0x72, 0x65, 0x73, 0x20, 0x4c,
+//      0x6f, 0x67, 0x69, 0x63,
+//
+//      /* Product string descriptor: Index 2 - "EL CDCECM Device" */
+//      0x09, 0x04, 0x02, 0x10,
+//      0x45, 0x4c, 0x20, 0x43, 0x44, 0x43, 0x45, 0x43,
+//      0x4d, 0x20, 0x44, 0x65, 0x76, 0x69, 0x63, 0x64,
+//
+//      /* Serial Number string descriptor: Index 3 - "0001" */
+//      0x09, 0x04, 0x03, 0x04,
+//      0x30, 0x30, 0x30, 0x31,
+//
+//      /* MAC Address string descriptor: Index 4 - "001E5841B879" */
+//      0x09, 0x04, 0x04, 0x0C,
+//      0x30, 0x30, 0x31, 0x45, 0x35, 0x38,
+//      0x34, 0x31, 0x42, 0x38, 0x37, 0x39
+//
+//  };
+//
+//  unsigned char language_id_framework2[] = {
+//		    /* English. */
+//		    0x09, 0x04
+//		};
 
   /* The code below is required for installing the device portion of USBX.
      In this application */
@@ -336,6 +336,10 @@ UINT MX_USBX_Device_Init(VOID *memory_ptr)
     // Get RNDIS local MAC address
     USBD_RNDIS_GetMacAdd((uint8_t *)RNDIS_LOCAL_MAC_STR_DESC, rndis_local_nodeid);
 
+// For reference from device descriptor file:
+//#define RNDIS_LOCAL_MAC_STR_DESC                      (uint8_t *)"000202030000"
+//#define RNDIS_REMOTE_MAC_STR_DESC                     (uint8_t *)"000202030001"
+
     // Define RNDIS local node id
     rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[0] = rndis_local_nodeid[0];
     rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[1] = rndis_local_nodeid[1];
@@ -343,6 +347,12 @@ UINT MX_USBX_Device_Init(VOID *memory_ptr)
     rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[3] = rndis_local_nodeid[3];
     rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[4] = rndis_local_nodeid[4];
     rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[5] = rndis_local_nodeid[5];
+//    rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[0] = 0;
+//    rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[1] = 2;
+//    rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[2] = 2;
+//    rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[3] = 3;
+//    rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[4] = 0;
+//    rndis_parameter.ux_slave_class_rndis_parameter_local_node_id[5] = 0;
 
     // Get RNDIS local MAC address
     USBD_RNDIS_GetMacAdd((uint8_t *)RNDIS_REMOTE_MAC_STR_DESC, rndis_remote_nodeid);
@@ -354,6 +364,12 @@ UINT MX_USBX_Device_Init(VOID *memory_ptr)
     rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[3] = rndis_remote_nodeid[3];
     rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[4] = rndis_remote_nodeid[4];
     rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[5] = rndis_remote_nodeid[5];
+//    rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[0] = 0;
+//    rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[1] = 2;
+//    rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[2] = 2;
+//    rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[3] = 3;
+//    rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[4] = 0;
+//    rndis_parameter.ux_slave_class_rndis_parameter_remote_node_id[5] = 1;
 
     rndis_parameter.ux_slave_class_rndis_parameter_vendor_id      = USBD_VID;
     rndis_parameter.ux_slave_class_rndis_parameter_driver_version = USBD_RNDIS_DRIVER_VERSION;
@@ -384,7 +400,7 @@ UINT MX_USBX_Device_Init(VOID *memory_ptr)
 	{
 		return status;
 	}*/
-	nx_system_initialize();
+	//nx_system_initialize();
 	ux_network_driver_init();
 
   /* Initialize the hid class parameters for the device. */
@@ -560,6 +576,11 @@ void MX_USB_Device_Init(void)
   HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x80, PCD_SNG_BUF, 0x4C);
   HAL_PCDEx_PMAConfig(&hpcd_USB_DRD_FS, 0x81, PCD_SNG_BUF, 0x8C);
   /* USER CODE END USB_Device_Init_PreTreatment_1 */
+//
+//  HAL_PCDEx_SetRxFiFo(&hpcd_USB_DRD_FS, 0x200);
+//  HAL_PCDEx_SetTxFiFo(&hpcd_USB_DRD_FS, 0, 0x10);
+//  HAL_PCDEx_SetTxFiFo(&hpcd_USB_DRD_FS, 1, 0x80);
+//  HAL_PCDEx_SetTxFiFo(&hpcd_USB_DRD_FS, 2, 0x20);
 
   /* initialize the device controller driver*/
   _ux_dcd_stm32_initialize((ULONG)USB_DRD_FS, (ULONG)&hpcd_USB_DRD_FS);
