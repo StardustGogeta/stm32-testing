@@ -42,7 +42,7 @@ extern "C" {
 /* define the size of static threadX byte memory pools */
 #define TX_APP_MEM_POOL_SIZE                     (2 * 1024)
 
-#define NX_APP_MEM_POOL_SIZE                     (98 * 1024)
+#define NX_APP_MEM_POOL_SIZE                     (88 * 1024)
 
 #define UX_DEVICE_APP_MEM_POOL_SIZE              (32 * 1024)
 

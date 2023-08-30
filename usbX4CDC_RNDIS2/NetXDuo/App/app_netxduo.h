@@ -54,7 +54,7 @@ extern "C" {
 #define PACKET_PAYLOAD_SIZE              1536
 
 /* Packet pool size */
-#define NX_PACKET_POOL_SIZE              ((1536 + sizeof(NX_PACKET)) * 60)
+#define NX_PACKET_POOL_SIZE              ((1536 + sizeof(NX_PACKET)) * 40)
 
 /* HTTP connection port */
 #define CONNECTION_PORT                  80

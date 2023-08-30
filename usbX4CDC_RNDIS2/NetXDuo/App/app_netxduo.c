@@ -54,7 +54,10 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 #define     DEMO_STACK_SIZE         4096
-
+#define 	DEFAULT_PORT			6000
+#define		LINK_PRIORITY			11
+#define 	NX_APP_CABLE_CONNECTION_CHECK_PERIOD  (NX_IP_PERIODIC_RATE)
+#define 	NX_APP_THREAD_STACK_SIZE	2 * 1024
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -62,9 +65,11 @@
 NX_IP              rndis_ip;
 NX_PACKET_POOL     net_packet_pool;
 //NX_DHCP_SERVER     dhcp_server;
+TX_THREAD               AppLinkThread;
 TX_THREAD               my_thread;
 NX_DHCP                 my_dhcp;
 NX_IP                   my_ip;
+int shouldGo = 0;
 
 ALIGN_32BYTES(uint32_t DataBuffer[512]);
 
@@ -82,6 +87,7 @@ __attribute__((section(".UsbxAppSection")))
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 void    my_thread_entry(ULONG thread_input);
+static VOID App_Link_Thread_Entry(ULONG thread_input);
 /* USER CODE END PFP */
 /**
   * @brief  Application NetXDuo Initialization.
@@ -101,16 +107,16 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
   UCHAR *pointer;
   UINT addresses_added;
 
-//  /* Allocate the stack for my_thread_entry. */
-//  if (tx_byte_allocate(byte_pool, (VOID **) &pointer,
-//		  DEMO_STACK_SIZE, TX_NO_WAIT) != TX_SUCCESS)
-//  {
-//    return TX_POOL_ERROR;
-//  }
-//
-//  /* Create “my_thread�?.  */
-//  tx_thread_create(&my_thread, "my thread", my_thread_entry, 0,
-//					pointer, DEMO_STACK_SIZE, 2, 2, TX_NO_TIME_SLICE, TX_AUTO_START);
+  /* Allocate the stack for my_thread_entry. */
+  if (tx_byte_allocate(byte_pool, (VOID **) &pointer,
+		  DEMO_STACK_SIZE, TX_NO_WAIT) != TX_SUCCESS)
+  {
+    return TX_POOL_ERROR;
+  }
+
+  /* Create “my_thread�?.  */
+  tx_thread_create(&my_thread, "my thread", my_thread_entry, 0,
+					pointer, DEMO_STACK_SIZE, 2, 2, TX_NO_TIME_SLICE, TX_AUTO_START);
 
 	/* Initialize the NetX system */
 	nx_system_initialize();
@@ -217,6 +223,22 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
 //  {
 //    Error_Handler();
 //  }
+
+  /* Allocate the memory for Link thread   */
+  if (tx_byte_allocate(byte_pool, (VOID **) &pointer,NX_APP_THREAD_STACK_SIZE, TX_NO_WAIT) != TX_SUCCESS)
+  {
+    return TX_POOL_ERROR;
+  }
+
+  /* create the Link thread */
+  ret = tx_thread_create(&AppLinkThread, "App Link Thread", App_Link_Thread_Entry, 0, pointer, NX_APP_THREAD_STACK_SIZE,
+                         LINK_PRIORITY, LINK_PRIORITY, TX_NO_TIME_SLICE, TX_AUTO_START);
+
+  if (ret != TX_SUCCESS)
+  {
+    return NX_NOT_ENABLED;
+  }
+
   /* USER CODE END MX_NetXDuo_Init */
 
   return ret;
@@ -226,64 +248,94 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
 
 void    my_thread_entry(ULONG thread_input)
  {
-//	UINT status;
-//	ULONG actual_status;
-//	NX_PACKET *my_packet;
-//	int error_counter = 0;
-//	/* Wait for the link to come up.  */
-//	do
-//	{
-//	/* Get the link status.  */
-//		status =  nx_ip_status_check(&rndis_ip, NX_IP_LINK_ENABLED,
-//									 &actual_status, 100);
-//	} while (status != NX_SUCCESS);
-//
-//	/* Create a DHCP instance.  */
-//	status =  nx_dhcp_create(&my_dhcp, &rndis_ip, "My DHCP");
-//
-//	/* Check for DHCP create error.  */
-//	if (status)
-//		error_counter++;
-//
-//	/* Start DHCP.  */
-//	nx_dhcp_start(&my_dhcp);
-//
-//	/* Check for DHCP start error.  */
-//	if (status)
-//		error_counter++;
-//
-//	/* Wait for IP address to be resolved through DHCP.  */
-//	nx_ip_status_check(&rndis_ip, NX_IP_ADDRESS_RESOLVED,
-//					   (ULONG *) &status, 100000);
-//
-//	/* Check to see if we have a valid IP address.  */
-//	if (status != NX_IP_ADDRESS_RESOLVED)
-//	{
-//	  error_counter++;
-//	  return;
-//	}
-//	else
-//	{
-//
-//	/* Yes, a valid IP address is now on lease…  All NetX Duo
-//		services are available. */
-//	}
+	// Assumes PC IP address is set to 192.168.0.1
+	// This device has IP address 192.168.0.10 by default
+	ULONG svr_addr = IP_ADDRESS(192,168,0,1);
+	NX_PACKET *my_packet;
+	NX_UDP_SOCKET udp_socket;
+	int status;
+
+	if (nx_udp_socket_create(&rndis_ip, &udp_socket, "UDP Socket", NX_IP_NORMAL, NX_FRAGMENT_OKAY, NX_IP_TIME_TO_LIVE, 1) != NX_SUCCESS)
+	{
+	  Error_Handler();
+	}
+	int stat;
+	if ((stat = nx_udp_socket_bind(&udp_socket, DEFAULT_PORT, NX_WAIT_FOREVER)) != NX_SUCCESS)
+	{
+	  Error_Handler();
+	}
+
+	int i = 0;
+	char buf[16] = {};
+	while (1)
+	{
+		if (shouldGo)
+		{
+			sprintf(buf, "Hello world %d", (i++) % 10);
+			status = nx_packet_allocate(&net_packet_pool, &my_packet, NX_UDP_PACKET, NX_WAIT_FOREVER);
+			status = nx_packet_data_append(my_packet, buf, strlen(buf), &net_packet_pool, NX_WAIT_FOREVER);
+			status = nx_udp_socket_send(&udp_socket, my_packet, svr_addr, DEFAULT_PORT);
+			status = nx_packet_release(my_packet);
+		}
+		tx_thread_sleep(20);
+	}
 }
 
 /**
-  * @brief  nx_server_thread_entry
-  *         Application thread for HTTP web server
-  * @param  thread_input: not used
-  * @retval none
-  */
-VOID nx_server_thread_entry(ULONG thread_input)
+* @brief  Link thread entry
+* @param thread_input: ULONG thread parameter
+* @retval none
+*/
+static VOID App_Link_Thread_Entry(ULONG thread_input)
 {
-  NX_PARAMETER_NOT_USED(thread_input);
+  ULONG actual_status;
+  UINT linkdown = 0, status;
 
-//  /* Start DHCP Server processing */
-//  if (nx_dhcp_server_start(&dhcp_server) != NX_SUCCESS)
-//  {
-//    Error_Handler();
-//  }
+  while(1)
+  {
+    /* Get Physical Link status. */
+    status = nx_ip_interface_status_check(&rndis_ip, 0, NX_IP_LINK_ENABLED,
+                                      &actual_status, 10);
+
+    if(status == NX_SUCCESS)
+    {
+      if(linkdown == 1)
+      {
+        linkdown = 0;
+        status = nx_ip_interface_status_check(&rndis_ip, 0, NX_IP_ADDRESS_RESOLVED,
+                                      &actual_status, 10);
+        if(status == NX_SUCCESS)
+        {
+          /* The network cable is connected again. */
+          printf("The network cable is connected again.\n");
+          /* Print UDP Echo Server is available again. */
+          printf("UDP Echo Server is available again.\n");
+        }
+        else
+        {
+          /* The network cable is connected. */
+          printf("The network cable is connected.\n");
+          /* Send command to Enable Nx driver. */
+          nx_ip_driver_direct_command(&rndis_ip, NX_LINK_ENABLE,
+                                      &actual_status);
+          /* Restart DHCP Client. */
+//          nx_dhcp_stop(&DHCPClient);
+//          nx_dhcp_start(&DHCPClient);
+        }
+      }
+    }
+    else
+    {
+      if(0 == linkdown)
+      {
+        linkdown = 1;
+        /* The network cable is not connected. */
+        printf("The network cable is not connected.\n");
+      }
+    }
+    shouldGo = !linkdown;
+
+    tx_thread_sleep(NX_APP_CABLE_CONNECTION_CHECK_PERIOD);
+  }
 }
 /* USER CODE END 1 */
